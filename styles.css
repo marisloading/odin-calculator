@@ -1,1 +1,120 @@
+body {
+  font-family: "Sniglet", system-ui;
+}
 
+#calculator {
+  margin: 100px 500px;
+  background-color: salmon;
+  padding: 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#display-area {
+  background-color: rgb(115, 66, 74);
+  font-size: 50px;
+  font-weight: 400;
+  color: white;
+  padding: 10px;
+  border: 5px white solid;
+  border-radius: 20px;
+  min-height: 70px;
+}
+
+#buttons-area {
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+#number-buttons {
+  order: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: space-between;
+  align-content: stretch;
+}
+
+#operator-buttons {
+  order: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: space-between;
+  align-content: stretch;
+}
+
+#extra-buttons {
+  order: 1;
+  flex: 1;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-content: stretch;
+}
+
+#number-buttons button {
+  flex: 1;
+}
+
+#operator-buttons button:not(#equals) {
+  flex: 1;
+}
+
+#equals {
+  flex: 2;
+}
+
+#clear {
+  flex: 5;
+}
+
+button {
+  font-weight: 800;
+  color: rgb(116, 23, 73);
+  font-size: 50px;
+  min-width: 100px;
+  padding: 10px;
+  background-color: pink;
+  border: 2px purple solid;
+  border-radius: 20px;
+}
+
+button,
+button:focus {
+  background-image: linear-gradient(pink, rgb(229, 129, 254));
+  border-bottom: 5px solid rgb(50, 50, 50);
+  box-shadow: 0px 1px 6px 0px rgb(158, 129, 254);
+  transform: translate(0, -3px);
+  cursor: pointer;
+  transition: 0.2s;
+  transition-timing-function: linear;
+}
+
+button:active {
+  transform: translate(0, 0);
+  border-bottom: 2px solid rgb(50, 50, 50);
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #f59ef2, #e73c7e, #8b23d5, #6123d5);
+  background-size: 400% 400%;
+  animation: gradient-shift 15s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

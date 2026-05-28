@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- RELATIONS -->
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Sniglet:wght@400;800&display=swap");
+    </style>
+
     <link rel="stylesheet" href="styles.css" />
     <!-- HTML -->
     <title>Odin Calculator</title>
   </head>
-  <body>
+  <body class="animated-gradient">
     <div id="calculator">
       <span id="display-area">Display here</span>
       <div id="buttons-area">
@@ -30,7 +35,10 @@
           <button id="slash">/</button>
           <button id="equals">=</button>
         </div>
-        <button id="clear">C</button>
+        <div id="extra-buttons">
+          <button id="clear">C</button>
+          <button id="dot" value=".">.</button>
+        </div>
       </div>
     </div>
   </body>

@@ -2,6 +2,7 @@
 const numberBtns = document.getElementById("number-buttons");
 const operatorBtns = document.getElementById("operator-buttons");
 const clearBtn = document.getElementById("clear");
+const decimalBtn = document.getElementById("dot");
 const display = document.getElementById("display-area");
 
 let firstNumber = "";
@@ -12,6 +13,22 @@ let hasCalculated = false;
 
 numberBtns.addEventListener("click", inputNumbers);
 operatorBtns.addEventListener("click", addOperator);
+decimalBtn.addEventListener("click", () => {
+  let currentDisplay = display.textContent;
+
+  if (!currentDisplay.includes(".")) {
+    if (currentDisplay == "Display here" || hasCalculated) {
+      currentDisplay = "0.";
+      hasCalculated = false;
+    } else {
+      if (currentDisplay.length < 20) {
+        currentDisplay += ".";
+      }
+    }
+
+    display.textContent = currentDisplay;
+  }
+});
 clearBtn.addEventListener("click", () => {
   firstNumber = "";
   secondNumber = "";
@@ -19,56 +36,6 @@ clearBtn.addEventListener("click", () => {
 
   display.textContent = "";
 });
-
-/* function inputNumbers(e) {
-  const target = e.target;
-  let currentDisplay = display.textContent;
-
-  if (target.nodeName == "BUTTON") {
-    switch (target.parentNode.id) {
-      case "number-buttons":
-        if (currentDisplay == "Display here") {
-          currentDisplay = target.value;
-        } else {
-          currentDisplay += target.value;
-        }
-        break;
-      case "operator-buttons":
-        if (currentDisplay !== "Display here") {
-          if (target.id !== "equals") {
-            if (firstNumber == "") {
-              firstNumber = display.textContent;
-              currentDisplay = "";
-              operator = target.id;
-            } else if (secondNumber == "") {
-              secondNumber = display.textContent;
-              currentDisplay = calculate(firstNumber, secondNumber, operator);
-              firstNumber = display.textContent;
-              secondNumber = "";
-            } else {
-              console.log("Number two was not cleared");
-            }
-          } else {
-            if (firstNumber == "") {
-              firstNumber = display.textContent;
-              currentDisplay = firstNumber;
-            } else if (secondNumber == "") {
-              secondNumber = display.textContent;
-              currentDisplay = calculate(firstNumber, secondNumber, operator);
-              firstNumber = currentDisplay;
-              secondNumber = "";
-            } else {
-              console.log("Number two was not cleared");
-            }
-          }
-        }
-        break;
-    }
-  }
-  display.textContent = currentDisplay;
-  console.log(firstNumber);
-  console.log(secondNumber);
-} */
 
 function inputNumbers(e) {
   let currentDisplay = display.textContent;
@@ -79,7 +46,9 @@ function inputNumbers(e) {
       currentDisplay = number;
       hasCalculated = false;
     } else {
-      currentDisplay += number;
+      if (currentDisplay.length < 20) {
+        currentDisplay += number;
+      }
     }
 
     display.textContent = currentDisplay;
@@ -125,25 +94,27 @@ function addOperator(e) {
 function calculate(x, y, operator) {
   let numberOne = Number(x);
   let numberTwo = Number(y);
+  let result = 0;
 
   switch (operator) {
     case "plus":
-      console.log(`${numberOne} + ${numberTwo}`);
-      return numberOne + numberTwo;
+      result = numberOne + numberTwo;
+      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "minus":
-      console.log(`${numberOne} - ${numberTwo}`);
-      return numberOne - numberTwo;
+      result = numberOne - numberTwo;
+      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "mult":
-      console.log(`${numberOne} * ${numberTwo}`);
-      return numberOne * numberTwo;
+      result = numberOne * numberTwo;
+      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "slash":
-      console.log(`${numberOne} / ${numberTwo}`);
-      return numberOne / numberTwo;
+      result = numberOne / numberTwo;
+      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     default:
-      return numberOne;
+      result = numberOne;
   }
+  return result;
 }
