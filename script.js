@@ -6,6 +6,8 @@ const decimalBtn = document.getElementById("dot");
 const deleterBtn = document.getElementById("del");
 const display = document.getElementById("display-area");
 
+const audio = new Audio("button_press.mp3");
+
 let firstNumber = "";
 let secondNumber = "";
 let operator = "";
@@ -18,12 +20,8 @@ document.addEventListener("keydown", function (event) {
   let keyPressed = event.key;
 
   if (keyPressed == "Enter" || keyPressed == " ") {
-    console.log("Key is disabled: " + keyPressed);
-    event.preventDefault();
-    return false;
-  }
-
-  if (keyPressed >= 0 && keyPressed <= 9) {
+    addOperator("=");
+  } else if (keyPressed >= 0 && keyPressed <= 9) {
     console.log("Key pressed is a number: " + keyPressed);
     inputNumbers(keyPressed);
   } else if (operatorKeys.includes(keyPressed)) {
@@ -47,14 +45,20 @@ numberBtns.addEventListener("click", (e) => {
   currentDisplay = display.textContent;
 
   if (e.target.nodeName == "BUTTON") {
+    audio.currentTime = 0;
+    audio.play();
     let number = e.target.value;
     inputNumbers(number);
   }
 });
 operatorBtns.addEventListener("click", (e) => {
-  currentDisplay = display.textContent == "" ? 0 : display.textContent;
+  if (e.target.nodeName == "BUTTON") {
+    audio.currentTime = 0;
+    audio.play();
+    currentDisplay = display.textContent == "" ? 0 : display.textContent;
 
-  addOperator(e.target.id);
+    addOperator(e.target.id);
+  }
 });
 decimalBtn.addEventListener("click", addDecimal);
 
@@ -67,7 +71,7 @@ function inputNumbers(number) {
     currentDisplay = number;
     hasCalculated = false;
   } else {
-    if (currentDisplay.length < 20) {
+    if (currentDisplay.length < 18) {
       currentDisplay += number;
     }
   }
@@ -76,7 +80,7 @@ function inputNumbers(number) {
 }
 
 function addOperator(op) {
-  if (op == "equals" && operator == "") {
+  if (operator == "" && (op == "equals" || op == "=")) {
   } else {
     if (firstNumber == "") {
       firstNumber = currentDisplay;
@@ -86,7 +90,7 @@ function addOperator(op) {
     } else if (secondNumber == "") {
       secondNumber = currentDisplay;
 
-      if (op == "equals") {
+      if (op == "equals" || op == "=") {
         hasCalculated = true;
         currentDisplay = calculate(firstNumber, secondNumber, operator);
       } else {
@@ -127,20 +131,33 @@ function calculate(x, y, operator) {
   let numberTwo = Number(y);
   let result = 0;
 
+  console.log(operator);
+  console.log(operator == "+");
+
   switch (operator) {
     case "plus":
+    case "+":
+      console.log("plus case");
       result = numberOne + numberTwo;
       break;
     case "minus":
+    case "-":
+      console.log("minus case");
+      console.log(numberOne + numberTwo);
       result = numberOne - numberTwo;
       break;
     case "mult":
+    case "*":
+      console.log("mult case");
       result = numberOne * numberTwo;
       break;
     case "slash":
+    case "/":
+      console.log("slash case");
       result = numberOne / numberTwo;
       break;
     default:
+      console.log("default case");
       result = numberOne;
   }
   console.log(result);
@@ -163,10 +180,12 @@ function calculate(x, y, operator) {
 }
 
 function addDecimal() {
-  let currentDisplay = display.textContent;
+  audio.currentTime = 0;
+  audio.play();
+  currentDisplay = display.textContent;
 
   if (!currentDisplay.includes(".")) {
-    if (currentDisplay.length < 20) {
+    if (currentDisplay.length < 18) {
       currentDisplay += currentDisplay == "" ? "0." : ".";
     }
 
@@ -180,16 +199,21 @@ function addDecimal() {
 }
 
 function clearDisplay() {
+  audio.currentTime = 0;
+  audio.play();
   firstNumber = "";
   secondNumber = "";
   operator = "";
   hasCalculated = false;
+  currentDisplay = "";
 
   display.textContent = "";
 }
 
 function delPrev() {
-  let currentDisplay = display.textContent;
+  audio.currentTime = 0;
+  audio.play();
+  currentDisplay = display.textContent;
   currentDisplay = currentDisplay.slice(0, -1);
 
   display.textContent = currentDisplay;

@@ -2,10 +2,24 @@ body {
   font-family: "Sniglet", system-ui;
 }
 
+h1 {
+  font-size: 50px;
+  font-weight: 800;
+  text-align: center;
+  color: rgb(203 103 92);
+}
+
 #calculator {
   margin: 100px 500px;
   background-color: salmon;
   padding: 50px;
+  border: 5px rgb(72, 9, 51) solid;
+  box-shadow:
+    rgb(85, 91, 255) 0px 0px 0px 3px,
+    rgb(31, 193, 27) 0px 0px 0px 6px,
+    rgb(255, 217, 19) 0px 0px 0px 9px,
+    rgb(255, 156, 85) 0px 0px 0px 12px,
+    rgb(255, 85, 85) 0px 0px 0px 15px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -14,6 +28,33 @@ body {
 
 #display-area {
   background-color: rgb(115, 66, 74);
+  background-image:
+    linear-gradient(
+      0deg,
+      transparent 24%,
+      rgba(0, 0, 0, 0.1) 25%,
+      rgba(0, 0, 0, 0.1) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(0, 0, 0, 0.1) 75%,
+      rgba(0, 0, 0, 0.1) 76%,
+      transparent 77%,
+      transparent
+    ),
+    linear-gradient(
+      90deg,
+      transparent 24%,
+      rgba(0, 0, 0, 0.1) 25%,
+      rgba(0, 0, 0, 0.1) 26%,
+      transparent 27%,
+      transparent 74%,
+      rgba(0, 0, 0, 0.1) 75%,
+      rgba(0, 0, 0, 0.1) 76%,
+      transparent 77%,
+      transparent
+    );
+  height: 100%;
+  background-size: 100px 100px;
   font-size: 50px;
   font-weight: 400;
   color: white;
@@ -104,7 +145,7 @@ button:active {
 .animated-gradient {
   background: linear-gradient(-45deg, #f59ef2, #e73c7e, #8b23d5, #6123d5);
   background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
+  animation: gradient-shift 10s ease infinite;
 }
 
 @keyframes gradient-shift {
