@@ -3,95 +3,126 @@ const numberBtns = document.getElementById("number-buttons");
 const operatorBtns = document.getElementById("operator-buttons");
 const clearBtn = document.getElementById("clear");
 const decimalBtn = document.getElementById("dot");
+const deleterBtn = document.getElementById("del");
 const display = document.getElementById("display-area");
 
 let firstNumber = "";
 let secondNumber = "";
 let operator = "";
+let currentDisplay = display.textContent;
 
 let hasCalculated = false;
 
-numberBtns.addEventListener("click", inputNumbers);
-operatorBtns.addEventListener("click", addOperator);
-decimalBtn.addEventListener("click", () => {
-  let currentDisplay = display.textContent;
+document.addEventListener("keydown", function (event) {
+  const operatorKeys = "+-/*=";
+  let keyPressed = event.key;
 
-  if (!currentDisplay.includes(".")) {
-    if (currentDisplay == "Display here" || hasCalculated) {
-      currentDisplay = "0.";
-      hasCalculated = false;
-    } else {
-      if (currentDisplay.length < 20) {
-        currentDisplay += ".";
-      }
-    }
+  if (keyPressed == "Enter" || keyPressed == " ") {
+    console.log("Key is disabled: " + keyPressed);
+    event.preventDefault();
+    return false;
+  }
 
-    display.textContent = currentDisplay;
+  if (keyPressed >= 0 && keyPressed <= 9) {
+    console.log("Key pressed is a number: " + keyPressed);
+    inputNumbers(keyPressed);
+  } else if (operatorKeys.includes(keyPressed)) {
+    console.log("Key pressed is an operator: " + keyPressed);
+    addOperator(keyPressed);
+  } else if (keyPressed == "Delete" || keyPressed == "c") {
+    console.log("Key pressed clears: " + keyPressed);
+    clearDisplay();
+  } else if (keyPressed == "Backspace") {
+    console.log("Key pressed deletes: " + keyPressed);
+    delPrev();
+  } else if (keyPressed == ".") {
+    console.log("Key pressed creates decimal: " + keyPressed);
+    addDecimal();
+  } else {
+    console.log("Key is not accepted: " + keyPressed);
   }
 });
-clearBtn.addEventListener("click", () => {
-  firstNumber = "";
-  secondNumber = "";
-  operator = "";
 
-  display.textContent = "";
-});
-
-function inputNumbers(e) {
-  let currentDisplay = display.textContent;
+numberBtns.addEventListener("click", (e) => {
+  currentDisplay = display.textContent;
 
   if (e.target.nodeName == "BUTTON") {
     let number = e.target.value;
-    if (currentDisplay == "Display here" || hasCalculated) {
-      currentDisplay = number;
-      hasCalculated = false;
-    } else {
-      if (currentDisplay.length < 20) {
-        currentDisplay += number;
-      }
-    }
-
-    display.textContent = currentDisplay;
+    inputNumbers(number);
   }
-}
+});
+operatorBtns.addEventListener("click", (e) => {
+  currentDisplay = display.textContent == "" ? 0 : display.textContent;
 
-function addOperator(e) {
-  let currentDisplay = display.textContent == "" ? 0 : display.textContent;
+  addOperator(e.target.id);
+});
+decimalBtn.addEventListener("click", addDecimal);
 
-  if (firstNumber == "") {
-    firstNumber = currentDisplay;
-    operator = e.target.id;
-    console.log("The operator clicked was: " + operator);
-    console.log("The current first number is: " + firstNumber);
+clearBtn.addEventListener("click", clearDisplay);
 
-    currentDisplay = "";
-  } else if (secondNumber == "") {
-    secondNumber = currentDisplay;
-    console.log("The current second number is: " + secondNumber);
+deleterBtn.addEventListener("click", delPrev);
 
-    if (e.target.id == "equals") {
-      hasCalculated = true;
-      currentDisplay = calculate(firstNumber, secondNumber, operator);
-      console.log("This operator should not be equals: " + operator);
-    } else {
-      hasCalculated = false;
-      currentDisplay = calculate(firstNumber, secondNumber, operator);
-      operator = e.target.id;
-      console.log(
-        "This operator should be the same as the one clicked: " + operator,
-      );
+function inputNumbers(number) {
+  if (currentDisplay == "Display here" || hasCalculated) {
+    currentDisplay = number;
+    hasCalculated = false;
+  } else {
+    if (currentDisplay.length < 20) {
+      currentDisplay += number;
     }
-    firstNumber = "";
-    secondNumber = "";
-    operator = "";
-    console.log("After calculations, first number is: " + firstNumber);
-    console.log("After calculations, second number is: " + secondNumber);
   }
 
   display.textContent = currentDisplay;
 }
 
+function addOperator(op) {
+  if (op == "equals" && operator == "") {
+  } else {
+    if (firstNumber == "") {
+      firstNumber = currentDisplay;
+      operator = op;
+
+      currentDisplay = "";
+    } else if (secondNumber == "") {
+      secondNumber = currentDisplay;
+
+      if (op == "equals") {
+        hasCalculated = true;
+        currentDisplay = calculate(firstNumber, secondNumber, operator);
+      } else {
+        hasCalculated = false;
+        currentDisplay = calculate(firstNumber, secondNumber, operator);
+        operator = op;
+        console.log(operator);
+      }
+      if (hasCalculated) {
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";
+      } else {
+        firstNumber = currentDisplay;
+        console.log(firstNumber);
+        secondNumber = "";
+        console.log(secondNumber);
+        console.log(operator);
+        currentDisplay = "";
+      }
+    }
+
+    display.textContent = currentDisplay;
+  }
+}
+
 function calculate(x, y, operator) {
+  const regex = RegExp("/[^0-9\.]+/g");
+  console.log("number one: " + x);
+  console.log("number two: " + y);
+  if (regex.test(y)) {
+    y = y.replace(regex, "");
+  }
+  if (regex.test(x)) {
+    x = x.replace(regex, "");
+  }
   let numberOne = Number(x);
   let numberTwo = Number(y);
   let result = 0;
@@ -99,22 +130,67 @@ function calculate(x, y, operator) {
   switch (operator) {
     case "plus":
       result = numberOne + numberTwo;
-      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "minus":
       result = numberOne - numberTwo;
-      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "mult":
       result = numberOne * numberTwo;
-      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     case "slash":
       result = numberOne / numberTwo;
-      result = result.length > 18 ? result.toFixed(17) : result;
       break;
     default:
       result = numberOne;
   }
+  console.log(result);
+  result = result.toString();
+  console.log("Result's length: " + result.length);
+
+  if (result.length > 18) {
+    result = Number(result);
+    result = result.toFixed(17);
+  } else {
+    result = Number(result);
+  }
+
+  if (result == 420 || result == 69) {
+    result = result + " (nice)";
+  } else if (!isFinite(result)) {
+    result = "alright calm down";
+  }
   return result;
+}
+
+function addDecimal() {
+  let currentDisplay = display.textContent;
+
+  if (!currentDisplay.includes(".")) {
+    if (currentDisplay.length < 20) {
+      currentDisplay += currentDisplay == "" ? "0." : ".";
+    }
+
+    display.textContent = currentDisplay;
+  } else if (hasCalculated) {
+    currentDisplay = "0.";
+    hasCalculated = false;
+
+    display.textContent = currentDisplay;
+  }
+}
+
+function clearDisplay() {
+  firstNumber = "";
+  secondNumber = "";
+  operator = "";
+  hasCalculated = false;
+
+  display.textContent = "";
+}
+
+function delPrev() {
+  let currentDisplay = display.textContent;
+  currentDisplay = currentDisplay.slice(0, -1);
+
+  display.textContent = currentDisplay;
 }
